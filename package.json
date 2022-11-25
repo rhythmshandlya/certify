@@ -1,0 +1,27 @@
+{
+  "name": "certifi",
+  "version": "1.0.0",
+  "description": "A certificate generation tool for institutes",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run client\"   \"npm run server\" ",
+    "client": "cd ./certify && npm start",
+    "server": "cd ./server && yarn dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aynahsi/certifi.git"
+  },
+  "author": "Ishanya Yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aynahsi/certifi/issues"
+  },
+  "homepage": "https://github.com/aynahsi/certifi#readme",
+  "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
+    "concurrently": "^7.4.0",
+    "fabric": "^4.5.0",
+    "react-design-editor": "^0.0.52"
+  }
+}
