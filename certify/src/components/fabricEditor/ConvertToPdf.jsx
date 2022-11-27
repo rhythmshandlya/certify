@@ -23,20 +23,20 @@ const ConvertToPdf = () => {
     pdf.save("canvas.pdf");
   }
   return (
-    <>
+    <div className="flex mx-10 my-2">
       <button
-        className="text-gray-400 m-3 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        className="text-gray-400 m-3 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto items-center dark:hover:bg-gray-600 dark:hover:text-white"
         onClick={ExportSvg}
       >
         To SVG
       </button>
       <button
-        className="text-gray-400 m-3 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+        className="text-gray-400 m-3 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto items-center dark:hover:bg-gray-600 dark:hover:text-white"
         onClick={ExportPdf}
       >
         To Pdf
       </button>
-    </>
+    </div>
   );
 };
 

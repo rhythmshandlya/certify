@@ -17,7 +17,7 @@ const AddSampleImage = () => {
     );
   };
   return (
-    <div className="ml-36 border-4 p-6 bg-gray-100 w-[600px] h-[800px] overflow-y-scroll">
+    <div className="ml-6 border-4 p-6 bg-gray-100 w-[450px] h-[800px] overflow-y-scroll">
       <div className="text-2xl my-4">Sample Image</div>
       <div className="flex flex-wrap">
         {images.map((img) => {

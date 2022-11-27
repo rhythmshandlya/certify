@@ -29,7 +29,7 @@ const SignUp = () => {
     <>
       <div className="lg:flex">
         <div className="lg:w-1/2 xl:max-w-screen-sm">
-          <div className="mt-36 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-36 xl:px-24 xl:max-w-2xl">
+          <div className="mt-16 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
             <h2
               className="text-center text-4xl text-indigo-900 font-display font-semibold lg:text-left xl:text-5xl
                 xl:text-bold"
@@ -90,6 +90,36 @@ const SignUp = () => {
                       setData({ ...data, password: e.target.value });
                     }}
                   />
+                </div>
+                <div className="flex justify-around m-10">
+                  <div className="cursor-pointer">
+                    <Player
+                      autoplay
+                      loop
+                      src="https://assets3.lottiefiles.com/packages/lf20_qct0ydor.json"
+                      style={{
+                        height: "100px",
+                        width: "100px",
+                      }}
+                    ></Player>
+                    <span
+                      onClick={(e) => {
+                        setData({ ...data, role: "organization" });
+                        e.target.innerHTML = "[selected]";
+                      }}
+                    >
+                      Organization
+                    </span>
+                  </div>
+                  <div className="cursor-pointer text-center">
+                    <Player
+                      autoplay
+                      loop
+                      src="https://assets10.lottiefiles.com/packages/lf20_b7t4ylgj.json"
+                      style={{ height: "100px", width: "100px" }}
+                    ></Player>
+                    Student
+                  </div>
                 </div>
                 <div className="mt-10">
                   <button

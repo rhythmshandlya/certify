@@ -6,7 +6,7 @@ const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 
-router.route('/').post(auth(), eventController.createEvent).get(eventController.getEvents);
+router.route('/').post(auth('addEvent'), eventController.createEvent).get(eventController.getEvents);
 
 router.route('/send-certificate').post(eventController.sendEventEmail);
 

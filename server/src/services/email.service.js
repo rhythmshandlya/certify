@@ -8,8 +8,8 @@ const transport = nodemailer.createTransport({
   host: 'smtp.ethereal.email',
   port: 587,
   auth: {
-    user: 'marisol.thompson15@ethereal.email',
-    pass: 'VN12nfkwSfRn7BfDEu',
+    user: 'jany.williamson0@ethereal.email',
+    pass: 'mtRNrtrsDEUN5UDKFn',
   },
 });
 
@@ -68,8 +68,12 @@ If you did not create an account, then ignore this email.`;
 const sendCertificateViaEmail = async (id) => {
   const event = await Event.findById(id);
   event.participants.forEach(async (participant, index) => {
-    console.log(participant.email);
-    await sendEmail(participant.email, 'Certificate for ' + event.name, `http://localhost:3000/certificate/${id}/index`);
+    if (participant.email)
+      await sendEmail(
+        participant.email,
+        'Certificate for ' + event.name,
+        `http://localhost:3000/certificate/${id}/${index}`
+      );
   });
 };
 

@@ -7,7 +7,7 @@ const Banner = ({ name, description, image, id }) => {
     <div className="m-10">
       <div className="bg-white shadow-md border border-gray-200 rounded-lg max-w-xl dark:bg-gray-800 dark:border-gray-700 flex">
         <img
-          className="rounded-t-lg w-[200px] h-[200px] m-6"
+          className="rounded-t-lg w-[250px] h-[250px] m-6"
           src={image}
           alt=""
         />

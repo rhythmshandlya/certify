@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios, { axiosPrivate } from "../../api/axios";
 import { BsArrowLeftCircle } from "react-icons/bs";
 import { AiFillPieChart } from "react-icons/ai";
 import { SiFuturelearn } from "react-icons/si";
@@ -8,11 +8,14 @@ import { SiOpenaccess } from "react-icons/si";
 import { CgProfile } from "react-icons/cg";
 import Logo from "../extra/CertifyLogo";
 import useAuth from "../../hooks/useAuth";
+import { Player } from "@lottiefiles/react-lottie-player";
+import { BiLogOut } from "react-icons/bi";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { auth } = useAuth();
+  const navigate = useNavigate();
 
   const Menus = [
     { title: "Dashboard", path: "/", src: <AiFillPieChart /> },
@@ -21,7 +24,6 @@ const Sidebar = () => {
       title: "Certificate Editor",
       path: "/create",
       src: <SiOpenaccess />,
-      gap: "true",
     },
   ];
 
@@ -39,10 +41,12 @@ const Sidebar = () => {
         />
         <Link to="/">
           <div className={`flex ${open && "gap-x-4"} items-center`}>
-            <img
-              src="https://img.icons8.com/fluency/48/null/test-account.png"
-              alt="profile"
-            />
+            <Player
+              autoplay
+              loop
+              src="https://assets6.lottiefiles.com/private_files/lf30_XAX6ye.json"
+              style={{ height: "50px", width: "50px", padding: "5px" }}
+            ></Player>
             {open && (
               <span className="text-xl font-medium whitespace-nowrap dark:text-white">
                 {auth?.user?.name}
@@ -69,6 +73,35 @@ const Sidebar = () => {
               </li>
             </Link>
           ))}
+          <li
+            className={`flex items-center gap-x-6 p-3 text-base font-normal rounded-lg cursor-pointer dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700
+                        mt-9 `}
+          >
+            <div
+              className="flex"
+              onClick={async () => {
+                try {
+                  await axios.post("auth/logout", {
+                    refreshToken: auth.tokens.refresh.token,
+                  });
+                  navigate("/login");
+                } catch (e) {
+                  console.log(e);
+                  navigate("/login");
+                }
+              }}
+            >
+              <span className="text-2xl">
+                <BiLogOut />
+              </span>
+              <span
+                className={`${!open &&
+                  "hidden"} origin-left duration-300 hover:block ml-6`}
+              >
+                Logout
+              </span>
+            </div>
+          </li>
         </ul>
       </div>
     </>
