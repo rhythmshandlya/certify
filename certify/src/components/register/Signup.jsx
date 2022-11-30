@@ -102,14 +102,15 @@ const SignUp = () => {
                         width: "100px",
                       }}
                     ></Player>
-                    <span
+                    <p
                       onClick={(e) => {
                         setData({ ...data, role: "organization" });
-                        e.target.innerHTML = "[selected]";
+                        e.target.innerHTML = "✔️";
                       }}
+                      className="text-center"
                     >
                       Organization
-                    </span>
+                    </p>
                   </div>
                   <div className="cursor-pointer text-center">
                     <Player
@@ -118,7 +119,15 @@ const SignUp = () => {
                       src="https://assets10.lottiefiles.com/packages/lf20_b7t4ylgj.json"
                       style={{ height: "100px", width: "100px" }}
                     ></Player>
-                    Student
+                    <p
+                      onClick={(e) => {
+                        setData({ ...data, role: "student" });
+                        e.target.innerHTML = "✔️";
+                      }}
+                      className="text-center"
+                    >
+                      Student
+                    </p>
                   </div>
                 </div>
                 <div className="mt-10">

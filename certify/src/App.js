@@ -2,7 +2,6 @@ import "./App.css";
 import Login from "./components/login/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./components/register/Signup";
-import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Layout1 from "./components/layout/Layout1";
 import Editor from "./pages/Editor";
@@ -16,6 +15,7 @@ import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import Profile from "./pages/Profile";
 import JoinEvent from "./pages/JoinEvent";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const [canvasVal, setCanvasVal] = useState();
@@ -33,11 +33,6 @@ export default function App() {
       >
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Layout2 />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/certificate/:id/:pid" element={<Certificate />} />
-            </Route>
             <Route path="/">
               <Route path="/event/join/:id" element={<JoinEvent />} />
             </Route>
@@ -51,7 +46,12 @@ export default function App() {
                 </Route>
               </Route>
             </Route>
-            {/* <Route path="/"></Route> */}
+            <Route path="/" element={<Layout2 />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/certificate/:id/:pid" element={<Certificate />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </CanvasContext.Provider>

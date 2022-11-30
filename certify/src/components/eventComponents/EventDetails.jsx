@@ -7,6 +7,7 @@ import CopyToClip from "./CopyToClip";
 import canvasContext from "../../context/canvasContext";
 import { axiosPrivate } from "../../api/axios";
 import Save from "../fabricEditor/Save";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const allowedExtensions = ["csv"];
 
@@ -17,6 +18,10 @@ const EventDetails = ({ id }) => {
   const [file, setFile] = useState("");
   const [eventDetails, setEventDetails] = useState({});
   const { canvas } = useContext(canvasContext);
+  const [progress, setProgress] = useState("0%");
+  const [hideCertificate, setHideCertificate] = useState(false);
+  const [hideParticipants, setHideParticipants] = useState(false);
+  const [hideEmail, setHideEmail] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +58,8 @@ const EventDetails = ({ id }) => {
     await axiosPrivate.post("/events/send-certificate", { eventId: id });
     e.target.innerHTML = "Sent Email To All ";
     e.target.classList.add("cursor-not-allowed");
+    setProgress("100%");
+    setHideEmail(true);
   };
 
   const handleSubmit = async () => {
@@ -119,114 +126,162 @@ const EventDetails = ({ id }) => {
           <p className="text-2xl">{eventDetails.description}</p>
         </div>
       </div>
-      <div className="mt-[100px]">
-        <h1 className="text-[40px] text-center">
-          Create A Certificate Template:
-        </h1>
-        <EditorCertificate />
+      <p className="mt-28 ml-[10%]">progress: {progress}</p>
+
+      <div class="w-[80%] mx-auto bg-gray-200 rounded-full h-2.5 mt-2 dark:bg-gray-700">
+        <div
+          class="bg-blue-600 h-2.5 rounded-full dark:bg-blue-500"
+          style={{ width: progress }}
+        ></div>
       </div>
-      <>
-        <Save id={id} />
-      </>
-      <div className="flex justify-center m-8">
-        <div className="">
-          <h1 className="text-[40px] text-center mt-8">Participants</h1>
-          <div class="flex justify-center">
-            <div class="mb-3 w-96">
-              <label
-                for="formFile"
-                class="form-label inline-block mb-2 text-gray-700"
-              >
-                Choose A CSV File :
-              </label>
-              <input
-                onChange={handleFileChange}
-                className="form-control block w-full px-2 py-1.5 text-base font-normal  text-gray-700  bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                type="file"
-                id="formFile"
-              />
+      {/* */}
+      {hideCertificate ? (
+        <></>
+      ) : (
+        <>
+          <div className="mt-[100px]">
+            <h1 className="text-[40px] text-center">
+              Create A Certificate Template:
+            </h1>
+            <EditorCertificate />
+          </div>
+          <Save
+            id={id}
+            setHideCertificate={setHideCertificate}
+            setProgress={setProgress}
+          />
+        </>
+      )}
+
+      {hideParticipants ? (
+        <></>
+      ) : (
+        <>
+          {" "}
+          <h1 className="text-[40px] text-center mt-8">Add Participants</h1>
+          <div className="flex justify-around m-28 mb-10">
+            <div className="bg-blue-100 p-10">
+              <div class="flex justify-around ">
+                <div class="mb-3 w-96 mt-10">
+                  <label
+                    for="formFile"
+                    class="form-label inline-block mb-2 text-gray-700"
+                  >
+                    Choose A CSV File :
+                  </label>
+                  <input
+                    onChange={handleFileChange}
+                    className="form-control block w-full px-2 py-1.5 text-base font-normal  text-gray-700  bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    type="file"
+                    id="formFile"
+                  />
+                </div>
+              </div>
+              <div className="w-fit mx-auto mt-2">
+                <button
+                  className="text-center text-white font-bold rounded py-2 m-2 w-[80px] focus:outline-none bg-blue-700 border-2 border-indigo-400"
+                  onClick={handleSubmit}
+                >
+                  Add
+                </button>
+                <button
+                  className="text-center text-white font-bold rounded py-2 m-2 w-[100px] focus:outline-none bg-blue-700 border-2 border-indigo-400"
+                  onClick={handleDownload}
+                >
+                  Download
+                </button>
+              </div>
+            </div>
+            <div className="bg-green-100 p-20 px-28">
+              <p className="m-2 text-xl">Copy Invitation Link</p>
+              <CopyToClip copyText={"http://localhost:3000/event/join/" + id} />
             </div>
           </div>
-          <div className="w-fit mx-auto">
-            <button
-              className="text-center text-white font-bold rounded py-2 m-2 w-[80px] focus:outline-none bg-blue-700 border-2 border-indigo-400"
-              onClick={handleSubmit}
+          <button
+            className="m-3"
+            onClick={async (e) => {
+              e.target.innerHTML = "Refreshing..";
+              const res = await axiosPrivate.get("/events/" + id);
+              setData(res.data.participants);
+              e.target.innerHTML = "Refresh";
+            }}
+          >
+            Refresh
+          </button>
+          <div>
+            <div class="overflow-x-auto relative">
+              <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" class="py-3 px-6">
+                      Name
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                      Email
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((participant) => {
+                    if (!participant.email) {
+                      return <></>;
+                    }
+                    return (
+                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="py-4 px-6">{participant.name}</td>
+                        <td class="py-4 px-6">{participant.email}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button
+            onClick={(e) => {
+              setHideParticipants(true);
+              setProgress("66%");
+            }}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded m-4 px-10 py-2"
+          >
+            Lock Participants
+          </button>
+        </>
+      )}
+      {hideEmail ? (
+        <>
+          <div></div>
+          <Player
+            autoplay
+            loop
+            src="https://assets4.lottiefiles.com/private_files/lf30_P9kQz3.json"
+            style={{ height: "800px", width: "800px" }}
+          ></Player>
+          <h1 className="text-[60px] text-center m-10">Event Has Finished</h1>
+        </>
+      ) : (
+        <>
+          <div className="mt-10 w-1/4 text-center mx-auto">
+            <p className="text-3xl m-4">Send Mails To Everyone:</p>
+            <div
+              class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+              role="alert"
             >
-              Add
-            </button>
+              <strong class="font-bold">Alert: </strong>
+              <span class="block sm:inline">
+                If emails are send, event will be marked as complete and no
+                actions will be allowed further, be careful with it.
+              </span>
+            </div>
             <button
-              className="text-center text-white font-bold rounded py-2 m-2 w-[80px] focus:outline-none bg-blue-700 border-2 border-indigo-400"
-              onClick={handleDownload}
+              onClick={handleSendMail}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-4 rounded"
             >
-              Download
+              Send Mails To Participants
             </button>
           </div>
-        </div>
-        <div>
-          <p className="m-4">or</p>
-        </div>
-        <div className="bg-green-100 p-4 m-6">
-          <p className="m-2">Copy Invitation Link</p>
-          <CopyToClip copyText={"http://localhost:3000/event/join/" + id} />
-        </div>
-      </div>
-
-      <button
-        className="m-3"
-        onClick={async (e) => {
-          e.target.innerHTML = "Refreshing..";
-          const res = await axiosPrivate.get("/events/" + id);
-          setData(res.data.participants);
-          e.target.innerHTML = "Refresh";
-        }}
-      >
-        Refresh
-      </button>
-      <div>
-        <div class="overflow-x-auto relative">
-          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" class="py-3 px-6">
-                  Name
-                </th>
-                <th scope="col" class="py-3 px-6">
-                  Email
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((participant) => {
-                return (
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td class="py-4 px-6">{participant.name}</td>
-                    <td class="py-4 px-6">{participant.email}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="mt-10 w-1/4 text-center mx-auto">
-        <p className="text-3xl m-4">Send Mails To Everyone:</p>
-        <div
-          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <strong class="font-bold">Alert: </strong>
-          <span class="block sm:inline">
-            If emails are send, event will be marked as complete and no actions
-            will be allowed further, be careful with it.
-          </span>
-        </div>
-        <button
-          onClick={handleSendMail}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 m-4 rounded"
-        >
-          Send Mails To Participants
-        </button>
-      </div>
+        </>
+      )}
     </>
   );
 };

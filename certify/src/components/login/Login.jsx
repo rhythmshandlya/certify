@@ -18,7 +18,8 @@ const Login = () => {
       axiosPrivate.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${res.data.tokens.refresh.token}`;
-      navigate("/dashboard");
+      if (res.data.user.role === "student") navigate("/dashboard");
+      else navigate("/");
     } catch (e) {
       console.log(e);
     }

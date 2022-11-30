@@ -1,44 +1,24 @@
-const nodemailer = require('nodemailer');
-const config = require('../config/config');
 const logger = require('../config/logger');
 const { Event } = require('../models');
+const sgMail = require('@sendgrid/mail');
 
-// const transport = nodemailer.createTransport(config.email.smtp);
-const transport = nodemailer.createTransport({
-  host: 'smtp.ethereal.email',
-  port: 587,
-  auth: {
-    user: 'jany.williamson0@ethereal.email',
-    pass: 'mtRNrtrsDEUN5UDKFn',
-  },
-});
+sgMail.setApiKey('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');
 
-/* istanbul ignore next */
-if (config.env !== 'test') {
-  transport
-    .verify()
-    .then(() => logger.info('Connected to email server'))
-    .catch(() => logger.warn('Unable to connect to email server. Make sure you have configured the SMTP options in .env'));
-}
-
-/**
- * Send an email
- * @param {string} to
- * @param {string} subject
- * @param {string} text
- * @returns {Promise}
- */
 const sendEmail = async (to, subject, text) => {
-  const msg = { from: config.email.from, to, subject, text };
-  await transport.sendMail(msg);
+  const message = {
+    from: 'rhythmshandlya@gmail.com',
+    to,
+    subject,
+    text,
+    html: `<p>${text}<p>`,
+  };
+  try {
+    const res = await sgMail.send(message);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-/**
- * Send reset password email
- * @param {string} to
- * @param {string} token
- * @returns {Promise}
- */
 const sendResetPasswordEmail = async (to, token) => {
   const subject = 'Reset password';
   // replace this url with the link to the reset password page of your front-end app
@@ -49,12 +29,6 @@ If you did not request any password resets, then ignore this email.`;
   await sendEmail(to, subject, text);
 };
 
-/**
- * Send verification email
- * @param {string} to
- * @param {string} token
- * @returns {Promise}
- */
 const sendVerificationEmail = async (to, token) => {
   const subject = 'Email Verification';
   // replace this url with the link to the email verification page of your front-end app
@@ -78,7 +52,6 @@ const sendCertificateViaEmail = async (id) => {
 };
 
 module.exports = {
-  transport,
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
