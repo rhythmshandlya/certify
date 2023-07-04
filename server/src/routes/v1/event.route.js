@@ -18,7 +18,7 @@ router
 
 module.exports = router;
 
-/**
+/**Lorium Ipusm, oidj ieruasl jf wow, dffvv.
  * @swagger
  * tags:
  *   name: Event

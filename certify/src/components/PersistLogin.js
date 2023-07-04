@@ -27,7 +27,6 @@ const PersistLogin = () => {
     <>
       {isLoading ? (
         <div>
-          {" "}
           <Player
             autoplay
             loop

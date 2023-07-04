@@ -36,6 +36,12 @@ export default function App() {
             <Route path="/">
               <Route path="/event/join/:id" element={<JoinEvent />} />
             </Route>
+            <Route path="/" element={<Layout2 />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/certificate/:id/:pid" element={<Certificate />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
             <Route path="/" element={<Layout1 />}>
               <Route element={<PersistLogin />}>
                 <Route element={<RequireAuth />}>
@@ -45,12 +51,6 @@ export default function App() {
                   <Route path="/create" element={<Editor />} />
                 </Route>
               </Route>
-            </Route>
-            <Route path="/" element={<Layout2 />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/certificate/:id/:pid" element={<Certificate />} />
-              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>
